@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Searchbar, Form, Button, Label, Input } from './Searchbar.styled';
+import PropTypes from 'prop-types';
 
 export class SearchbarHeader extends Component {
   state = {
@@ -13,7 +14,7 @@ handleChange = e => {
 handleSubmit = e => {
   e.preventDefault();
 
-  this.props.dataName(this.state.name);
+  this.props.onSubmit(this.state.name);
   this.setState({ name: '' });
 };
 
@@ -41,6 +42,10 @@ render () {
   };
 };
 
+
+SearchbarHeader.propTypes = {
+  name: PropTypes.string,
+};
 
 
 
