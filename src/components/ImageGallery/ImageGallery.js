@@ -24,8 +24,10 @@ export class ImageGallery extends Component {
     async componentDidUpdate (prevProps, prevState) {
         const prevName = prevState.name;
         const nextName = this.state.name; 
+        const prevPage = prevState.page;
+        const nextPage = this.state.page;
 
-    if (prevName !== nextName) {
+    if (prevName !== nextName || prevPage !== nextPage) {
           this.addMoreImage ()
         };
     };
@@ -49,7 +51,6 @@ export class ImageGallery extends Component {
         await fetchArticlesWithQuery(name, page).then(response => {
             try {
                 this.setState(prevState => ({
-                    page: prevState.page +=1,
                     totalHits: response.data.totalHits,
                     img: [...prevState.img, ...response.data.hits],
                     spinner: false,
@@ -59,6 +60,10 @@ export class ImageGallery extends Component {
                 console.log('Error');
            }
         }); 
+    };
+
+    handleNextPage = () => {
+        this.setState({page: this.state.page + 1});
     };
 
     getLinkImage = (e) => {
@@ -75,7 +80,7 @@ export class ImageGallery extends Component {
         const { img, showModal, modalImage } = this.state;
         const toggleModal = this.toggleModal;
         const getLinkImage = this.getLinkImage;
-        const addMoreImage = this.addMoreImage;
+        const handleNextPage = this.handleNextPage;
         const handleChange = this.handleChange;
 
        return (
@@ -86,9 +91,9 @@ export class ImageGallery extends Component {
             <ImageGalleryItem dataImg={img} linkImage={getLinkImage} onClick={toggleModal}/>
          </Gallery>
 
-        {this.state.buttonLoader && <Button onClick={addMoreImage} dataState={this.state}/>}
+        {this.state.buttonLoader && <Button onClick={handleNextPage} dataState={this.state}/>}
         {this.state.spinner && <Spinner/>} 
-        {<Spinner/> && !<Button onClick={addMoreImage} dataState={this.state}/>}
+        {<Spinner/> && !<Button onClick={handleNextPage} dataState={this.state}/>}
         
         
         {showModal && <ModalWindow onClose={toggleModal}>
